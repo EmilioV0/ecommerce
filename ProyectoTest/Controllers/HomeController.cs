@@ -101,7 +101,7 @@ namespace ProyectoTest.Controllers
 
 
         [HttpGet]
-        public JsonResult ListarProducto()
+        public ContentResult ListarProducto()
         {
             List<Producto> oLista = new List<Producto>();
 
@@ -121,7 +121,18 @@ namespace ProyectoTest.Controllers
                           extension = Path.GetExtension(o.RutaImagen).Replace(".", ""),
                           Activo = o.Activo
                       }).ToList();
-            return Json(new { data = oLista }, JsonRequestBehavior.AllowGet);
+
+            var resultado = new
+            {
+                data = oLista
+            };
+
+            var json = JsonConvert.SerializeObject(resultado, new JsonSerializerSettings
+            {
+                MaxDepth = int.MaxValue
+            });
+
+            return Content(json, "application/json");
         }
 
         [HttpPost]
